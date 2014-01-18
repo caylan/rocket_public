@@ -1,3 +1,14 @@
+# Flask
+.DS_Store
+*.pyc
+*.pyo
+env
+env*
+venv
+venv*
+_mailinglist
+.tox
+
 *.py[cod]
 
 # C extensions
