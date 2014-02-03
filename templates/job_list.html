@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+{% for job in jobs %}
+	<li><h3>{{ job.name }}</h3>
+	<em>{{ job.location }}</em>
+	<p>{{ job.description }}</p></li>
+  {% else %}
+    <li><em>No jobs found. :(</em></li>
+{% endfor %}
+{% endblock %}
