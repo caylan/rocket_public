@@ -4,6 +4,10 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from wtforms import form, fields, validators
+
+from flask.ext import login
+
 ## Config setup
 app = Flask(__name__)
 
@@ -36,37 +40,114 @@ class Job(db.Model):
     def __repr__(self):
         return '<Job %r | %r>' % (self.name, self.id)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    first_name = db.Column(db.String(100))
+    last_name = db.Column(db.String(100))
+    email = db.Column(db.String(120), unique = True)
+    password = db.Column(db.String(64))
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
+
+    def __repr__(self):
+        return '<User %r>' % self.email
+
+class LoginForm(form.Form):
+    email = fields.TextField(validators=[validators.required()])
+    password = fields.PasswordField(validators=[validators.required()])
+
+    def validated_login(self, field):
+        user = self.get_user()
+        if user is None:
+            raise validators.ValidationError('Invalid email')
+        if user.password != self.password.data:
+            raise validators.ValidationError('Invalid password')
+
+    def get_user(self):
+        return db.session.query(User).filter_by(login=self.login.data).first()
+
+class RegistrationForm(form.Form):
+    email = fields.TextField(validators=[validators.required()])
+    password = fields.PasswordField(validators=[validators.required()])
+
+    def validate_login(self, field):
+        if db.session.query(User).filter_by(email=self.email.data).count() > 0:
+            raise validators.ValidationError('Duplicate email')
+
+# Initialize flask-login
+def init_login():
+    lm = login.LoginManager()
+    lm.init_app(app)
+    lm.login_view = 'login'
+
+    # User loader function
+    @login_manager.user_loader
+    def load_user(user_id):
+        return db.session.query(User).get(user_id)
+
 ## Load db models
 # import rocket_models
+
 
 ## Routing
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    if not login.current_user.is_authenticated():
+        return redirect(url_for('login'))
+    return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        # Do a login, might be different if we use flask-login
-        pass
-    else:
-        # Render login form
-        pass
+    form = LoginForm(request.form)
+    if helpers.validate_form_on_submit(form):
+        user = form.get_user()
+        login.login_user(user)
+    if login.current_user.is_authenticated():
+        return redirect(url_for('jobs'))
+    link = '<p>Don\'t have an account? <a href="' + url_for('register_view') + '">Click here to register.</a></p>'
+    self._template_args['form'] = form
+    self._template_args['link'] = link
 
-    return render_template('login.html')
-    return "This will be the login page"
+    # if request.method == 'POST':
+    #     # Do a login, might be different if we use flask-login
+    #     pass
+    # else:
+    #     # Render login form
+    #     pass
+
+    # return render_template('login.html', form = form)
+    # return "This will be the login page"
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        # Process the form and return user to login page
-        pass
-    else:
-        # Render a user registration form
-        pass
-    return "This will be a registration form"
+def register(self):
+    # if request.method == 'POST':
+    #     # Process the form and return user to login page
+    #     pass
+    # else:
+    #     # Render a user registration form
+    #     pass
+    # return "This will be a registration form"
+    form = RegistrationForm(request.form)
+    if helpers.validate_form_on_submit(form):
+        user = User()
+        form.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+        login.login_user(user)
+        return redirect(url_for('/jobs'))
 
 @app.route('/jobs')
+@login_required
 def show_jobs():
     """
     Renders a list of jobs that the currently logged in user qualifies for.
@@ -94,6 +175,8 @@ def display_job_details(jid):
     job = Job.query.get(jid)
     return "Job with id: " + jid + ", name: " + job.name + "location: " \
             + ", deadline: " + job.deadline + ", description: " + job.description
+
+init_login()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
