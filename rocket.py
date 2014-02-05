@@ -147,7 +147,6 @@ def register(self):
         return redirect(url_for('/jobs'))
 
 @app.route('/jobs')
-@login_required
 def show_jobs():
     """
     Renders a list of jobs that the currently logged in user qualifies for.
@@ -156,7 +155,9 @@ def show_jobs():
     # user = flask.ext.login.current_user
     # How do we filter the jobs, all job tags must be fulfilled by user?
     # jobs = Job.query.filter_by(tags=user.tags)
-
+    
+    if not login.current_user.is_authenticated():
+        return redirect(url_for('login'))
     j1 = Job('Job 1', 'Seattle, WA', datetime.now(), 'This is a description of the first job')
     j1.id = 1
     j2 = Job('Job 2', 'Spokane, WA', datetime.now(), 'This is a description of the second job')
