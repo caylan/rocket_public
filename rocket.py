@@ -105,7 +105,7 @@ def index():
     return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login_view():
+def login_view(self):
     form = LoginForm(request.form)
     if helpers.validate_form_on_submit(form):
         user = form.get_user()
