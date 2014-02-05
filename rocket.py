@@ -92,7 +92,7 @@ def init_login():
 @app.route('/')
 def index():
     if not current_user.is_authenticated():
-        return redirect(url_for('login_view'))
+        return redirect(url_for('login'))
     return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
