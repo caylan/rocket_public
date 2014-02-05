@@ -99,7 +99,7 @@ def init_login():
 
 ## Routing
 @app.route('/')
-def index():
+def index(self):
     if not login.current_user.is_authenticated():
         return redirect(url_for('login_view'))
     return redirect(url_for('jobs'))
@@ -145,7 +145,7 @@ def register_view(self):
         return redirect(url_for('/jobs'))
 
 @app.route('/jobs')
-def show_jobs():
+def show_jobs(self):
     """
     Renders a list of jobs that the currently logged in user qualifies for.
     """
