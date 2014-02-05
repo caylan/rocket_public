@@ -102,7 +102,7 @@ def init_login():
 @app.route('/')
 def index():
     if not login.current_user.is_authenticated():
-        return redirect(url_for('login'))
+        return redirect(url_for('login_view'))
     return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -156,7 +156,7 @@ def show_jobs():
     # jobs = Job.query.filter_by(tags=user.tags)
     
     if not login.current_user.is_authenticated():
-        return redirect(url_for('login'))
+        return redirect(url_for('login_view'))
     j1 = Job('Job 1', 'Seattle, WA', datetime.now(), 'This is a description of the first job')
     j1.id = 1
     j2 = Job('Job 2', 'Spokane, WA', datetime.now(), 'This is a description of the second job')
