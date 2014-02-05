@@ -3,10 +3,9 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 from flask.ext.sqlalchemy import SQLAlchemy
-
 from wtforms import form, fields, validators
-
 from flask.ext import login
+from flask.ext.admin import helpers
 
 ## Config setup
 app = Flask(__name__)
@@ -154,7 +153,7 @@ def show_jobs():
     # user = flask.ext.login.current_user
     # How do we filter the jobs, all job tags must be fulfilled by user?
     # jobs = Job.query.filter_by(tags=user.tags)
-    
+
     if not login.current_user.is_authenticated():
         return redirect(url_for('login_view'))
     j1 = Job('Job 1', 'Seattle, WA', datetime.now(), 'This is a description of the first job')
