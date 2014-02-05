@@ -32,6 +32,11 @@ If you've made any changes to the dependencies, run the following first:
 	
 	$ pip freeze > requirements.txt
 
+For future reference, doing this in Powershell saves requirements.txt automatically in Unicode,
+which is bad. Haven't looked up a way to fix this automatically, but it's not that that hard to
+just Save As and set encoding back to ANSI:
+http://georgik.sinusgear.com/2012/08/20/problems-with-deploying-heroku-django-app-from-windows/
+
 Then, push to heroku:
 
 	$ git push heroku master
