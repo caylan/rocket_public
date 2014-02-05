@@ -88,7 +88,6 @@ class RegistrationForm(form.Form):
 def init_login():
     lm = login.LoginManager()
     lm.init_app(app)
-    lm.login_view = 'login'
 
     # User loader function
     @login_manager.user_loader
@@ -107,7 +106,7 @@ def index():
     return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login_view():
     form = LoginForm(request.form)
     if helpers.validate_form_on_submit(form):
         user = form.get_user()
@@ -129,7 +128,7 @@ def login():
     # return "This will be the login page"
 
 @app.route('/register', methods=['GET', 'POST'])
-def register(self):
+def register_view(self):
     # if request.method == 'POST':
     #     # Process the form and return user to login page
     #     pass
