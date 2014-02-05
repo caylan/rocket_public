@@ -4,8 +4,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 from flask.ext.sqlalchemy import SQLAlchemy
 from wtforms import form, fields, validators
-from flask.ext import login
-from flask.ext.admin import helpers
+from flask.ext.login import (LoginManager, login_user, login_required)
 
 ## Config setup
 app = Flask(__name__)
@@ -65,15 +64,8 @@ class LoginForm(form.Form):
     email = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
-    def validated_login(self, field):
-        user = self.get_user()
-        if user is None:
-            raise validators.ValidationError('Invalid email')
-        if user.password != self.password.data:
-            raise validators.ValidationError('Invalid password')
-
-    def get_user(self):
-        return db.session.query(User).filter_by(login=self.login.data).first()
+    def get_user(email):
+        return db.session.query(User).filter_by(email=email).first()
 
 class RegistrationForm(form.Form):
     email = fields.TextField(validators=[validators.required()])
@@ -96,7 +88,6 @@ def init_login():
 ## Load db models
 # import rocket_models
 
-
 ## Routing
 @app.route('/')
 def index(self):
@@ -105,46 +96,31 @@ def index(self):
     return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login_view(self):
-    form = LoginForm(request.form)
-    if helpers.validate_form_on_submit(form):
-        user = form.get_user()
-        login.login_user(user)
+def login():
     if login.current_user.is_authenticated():
         return redirect(url_for('jobs'))
-    link = '<p>Don\'t have an account? <a href="' + url_for('register_view') + '">Click here to register.</a></p>'
-    self._template_args['form'] = form
-    self._template_args['link'] = link
 
-    # if request.method == 'POST':
-    #     # Do a login, might be different if we use flask-login
-    #     pass
-    # else:
-    #     # Render login form
-    #     pass
-
-    # return render_template('login.html', form = form)
-    # return "This will be the login page"
+    form = LoginForm()
+    if form.validate_on_submit():
+        login_user(user)
+        return redirect(url_for('jobs'))
 
 @app.route('/register', methods=['GET', 'POST'])
-def register_view(self):
-    # if request.method == 'POST':
-    #     # Process the form and return user to login page
-    #     pass
-    # else:
-    #     # Render a user registration form
-    #     pass
-    # return "This will be a registration form"
+def register():
+    if login.current_user.is_authenticated():
+        return redirect(url_for('jobs'))
+
     form = RegistrationForm(request.form)
-    if helpers.validate_form_on_submit(form):
+    if form.validate_on_submit():
         user = User()
         form.populate_obj(user)
         db.session.add(user)
         db.session.commit()
-        login.login_user(user)
-        return redirect(url_for('/jobs'))
+        login_user(user)
+        return redirect(url_for('jobs'))
 
 @app.route('/jobs')
+@login_required
 def show_jobs(self):
     """
     Renders a list of jobs that the currently logged in user qualifies for.
@@ -154,8 +130,6 @@ def show_jobs(self):
     # How do we filter the jobs, all job tags must be fulfilled by user?
     # jobs = Job.query.filter_by(tags=user.tags)
 
-    if not login.current_user.is_authenticated():
-        return redirect(url_for('login_view'))
     j1 = Job('Job 1', 'Seattle, WA', datetime.now(), 'This is a description of the first job')
     j1.id = 1
     j2 = Job('Job 2', 'Spokane, WA', datetime.now(), 'This is a description of the second job')
