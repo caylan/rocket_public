@@ -4,7 +4,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 from flask.ext.sqlalchemy import SQLAlchemy
 from wtforms import form, fields, validators
-from flask.ext.login import (LoginManager, login_user, login_required)
+from flask.ext.login import (LoginManager, current_user, login_user, login_required)
 
 ## Config setup
 app = Flask(__name__)
@@ -77,7 +77,7 @@ class RegistrationForm(form.Form):
 
 # Initialize flask-login
 def init_login():
-    login_manager = login.LoginManager()
+    login_manager = LoginManager()
     login_manager.init_app(app)
 
     # User loader function
@@ -91,13 +91,13 @@ def init_login():
 ## Routing
 @app.route('/')
 def index(self):
-    if not login.current_user.is_authenticated():
+    if not current_user.is_authenticated():
         return redirect(url_for('login_view'))
     return redirect(url_for('jobs'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if login.current_user.is_authenticated():
+    if current_user.is_authenticated():
         return redirect(url_for('jobs'))
 
     form = LoginForm()
@@ -107,7 +107,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if login.current_user.is_authenticated():
+    if current_user.is_authenticated():
         return redirect(url_for('jobs'))
 
     form = RegistrationForm(request.form)
