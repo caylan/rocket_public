@@ -86,8 +86,8 @@ class RegistrationForm(form.Form):
 
 # Initialize flask-login
 def init_login():
-    lm = login.LoginManager()
-    lm.init_app(app)
+    login_manager = login.LoginManager()
+    login_manager.init_app(app)
 
     # User loader function
     @login_manager.user_loader
