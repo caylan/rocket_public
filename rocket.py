@@ -3,7 +3,8 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 from flask.ext.sqlalchemy import SQLAlchemy
-from wtforms import Form, fields, validators
+from flask.ext.wtf import Form
+from wtforms import fields, validators
 from flask.ext.login import (LoginManager, current_user, login_user, login_required)
 
 ## Config setup
@@ -64,7 +65,7 @@ class LoginForm(Form):
     email = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
-    def validate_login(self):
+    def validate(self):
         user = self.get_user()
         if user is None:
             raise validators.ValidationError('Invalid user')
@@ -79,7 +80,7 @@ class RegistrationForm(Form):
     email = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
-    def validate_login(self, field):
+    def validate(self, field):
         if db.session.query(User).filter_by(email=self.email.data).count() > 0:
             raise validators.ValidationError('Duplicate email')
 
