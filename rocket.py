@@ -75,7 +75,7 @@ class LoginForm(Form):
     def get_user(self):
         return db.session.query(User).filter_by(email=self.email.data).first()
 
-class RegistrationForm(form.Form):
+class RegistrationForm(Form):
     email = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
