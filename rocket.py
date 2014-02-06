@@ -113,6 +113,7 @@ def login():
     if form.validate_on_submit():
         login_user(user)
         return redirect(url_for('jobs'))
+    return render_template('login.html', form = form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
