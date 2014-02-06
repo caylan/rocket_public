@@ -3,7 +3,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 from flask.ext.sqlalchemy import SQLAlchemy
-from wtforms import form, fields, validators
+from wtforms import Form, fields, validators
 from flask.ext.login import (LoginManager, current_user, login_user, login_required)
 
 ## Config setup
@@ -60,12 +60,20 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.email
 
-class LoginForm(form.Form):
+class LoginForm(Form):
     email = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
-    def get_user(email):
-        return db.session.query(User).filter_by(email=email).first()
+    def validate_login(self):
+        user = self.get_user()
+        if user is None:
+            raise validators.ValidationError('Invalid user')
+
+        if user.password != self.password.data:
+            raise validators.ValidationError('Invalid password')
+    
+    def get_user(self):
+        return db.session.query(User).filter_by(email=self.email.data).first()
 
 class RegistrationForm(form.Form):
     email = fields.TextField(validators=[validators.required()])
