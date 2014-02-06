@@ -111,6 +111,7 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
+        user = form.get_user()
         login_user(user)
         return redirect(url_for('jobs'))
     return render_template('login.html', form = form)
@@ -128,6 +129,7 @@ def register():
         db.session.commit()
         login_user(user)
         return redirect(url_for('jobs'))
+    return render_template('register.html', form = form)
 
 @app.route('/jobs')
 @login_required
