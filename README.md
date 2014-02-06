@@ -16,6 +16,9 @@ On Linux/Mac:
 
 	$ pip install -r requirements.txt
 
+Installing psycopg2 with pip on windows gave me some issues. I installed it from here: http://www.lfd.uci.edu/~gohlke/pythonlibs/#psycopg
+and then followed http://stackoverflow.com/a/13173362 if anyone else runs into the same issues.
+
 Now you're ready to code!
 
 # Deployment
