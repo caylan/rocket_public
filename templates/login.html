@@ -13,7 +13,7 @@
         <form method="post" name="login" role="form">
           {{ form.hidden_tag() }}
           <fieldset>
-            <h2>Please sign in, or <a href="#">Sign Up</a></h2>
+            <h2>Please sign in, or <a href="{{ url_for('register') }}">Sign Up</a></h2>
             <hr>
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6">
