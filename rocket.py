@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash
@@ -24,7 +25,7 @@ app.config.update(dict(
     PASSWORD='somethingthatisntthedefaultpassword'
 ))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://caylan@localhost/caylan'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
