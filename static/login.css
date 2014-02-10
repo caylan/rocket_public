@@ -1,0 +1,51 @@
+body {
+  font-size: 12px
+}
+.login-or {
+  position: relative;
+  font-size: 18px;
+  color: #aaa;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.span-or {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  margin-left: -25px;
+  background-color: #fff;
+  width: 50px;
+  text-align: center;
+}
+.hr-or {
+  background-color: #cdcdcd;
+  height: 1px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+h3 {
+  text-align: center;
+  line-height: 300%;
+}
+.login {
+  border: 1px solid gray;
+  margin: 20px;
+  padding: 30px;
+  padding-top: 5px;
+  background: rgb(255, 255, 255);
+}
+
+/* background image */
+html {
+  background: url(../static/seattle.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+body {
+  background: rgba(0, 0, 0, 0);
+}

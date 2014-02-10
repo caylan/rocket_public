@@ -79,8 +79,8 @@ class User(db.Model):
 #############
 
 class LoginForm(Form):
-    email = fields.TextField(u'Email', [InputRequired()])
-    password = fields.PasswordField(u'Password', [InputRequired()])
+    email = fields.TextField(u'email', [InputRequired()])
+    password = fields.PasswordField(u'password', [InputRequired()])
     remember_me = fields.BooleanField(u'remember_me', default=False)
 
     def validate_email(form, field):
@@ -98,10 +98,10 @@ class LoginForm(Form):
 
 
 class RegistrationForm(Form):
-    email = fields.TextField(validators=[InputRequired(),
-                                         Length(min=5, max=120),
-                                         Email()])
-    password = fields.PasswordField(validators=[InputRequired()])
+    email = fields.TextField(u'email', [InputRequired(),
+                                        Length(min=5, max=120),
+                                        Email()])
+    password = fields.PasswordField(u'password', [InputRequired()])
 
     def validate_email(form, field):
         if User.query.filter_by(email=field.data).count() > 0:
