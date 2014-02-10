@@ -2,7 +2,7 @@
 {% set active_page = "login" %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -29,15 +29,11 @@
             </div>
             <div class="form-group">
               {{ form.email(class_="form-control input-lg", type="email", placeholder="Email Address") }}
-              {% for error in form.errors.email %}
-              <span style="color: red;">[{{error}}]</span>
-              {% endfor %}<br>
+              {{ show_errors(form.errors.email) }}
             </div>
             <div class="form-group">
               {{ form.password(class_="form-control input-lg", placeholder="Password") }}
-              {% for error in form.errors.password %}
-              <span style="color: red;">[{{error}}]</span>
-              {% endfor %}<br>
+              {{ show_errors(form.errors.password) }}
             </div>
             <div class="checkbox">
               <label>{{ form.remember_me(class_="pull-left") }}Remember me </label>
