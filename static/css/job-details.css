@@ -1,0 +1,22 @@
+.banner {
+  margin-top: 21px;
+}
+.banner img {
+  z-index: 1;
+  display: block;
+  position: relative;
+}
+.banner h1 {
+  margin: 0;
+  padding-top: 15px;
+  padding-left: 30px;
+  font-size: 3em;
+}
+.banner-title {
+  margin-top: -80px;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2;
+  position: relative;
+  color: white;
+}

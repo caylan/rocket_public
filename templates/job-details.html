@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% set active_page = "details" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/job-details.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-8">
+      <div class="banner">
+        <img src="http://lorempixel.com/848/300/cats/8" class="img-responsive" alt="..." width="848" height="300">
+        <div class="banner-title"><h1>{{ job.name }}</h1></div>
+      </div>
+      <h3>{{ job.org.name }}</h3>
+      <p><em>Location: {{ job.location }}</em></p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed molestie libero. Sed sagittis risus vel odio eleifend viverra. Nam ac metus elementum, aliquet tortor vitae, porttitor turpis. Cras fermentum vehicula venenatis. Mauris cursus eu magna gravida facilisis. Praesent feugiat lorem eget nunc aliquet vehicula. Integer tristique orci rutrum tellus varius malesuada. In at sodales mauris, at rutrum nisi. Maecenas lectus mauris, ultricies ut ligula nec, placerat luctus ligula.</p>
+
+      <p>Mauris mattis consectetur quam, ut iaculis justo venenatis quis. Nulla nec arcu eget nisi interdum elementum sed sit amet nisi. Nulla congue dui ut massa accumsan, nec scelerisque erat euismod. Suspendisse potenti. Proin eleifend sollicitudin neque, eu pharetra neque gravida at. Quisque magna urna, adipiscing eget ultricies non, posuere vel eros. Ut ac orci blandit, fermentum metus eget, vulputate tortor. Morbi viverra ornare erat, porttitor tempor ante. Nulla quam erat, tempor a aliquet euismod, rhoncus nec mauris.</p>
+
+      <p>Duis sit amet eros eget massa varius suscipit. Phasellus purus tellus, bibendum ut libero vitae, ullamcorper molestie metus. In id libero sit amet magna ornare ultricies. Donec dignissim risus sed purus egestas facilisis. Quisque in velit quis sapien porta lacinia. Sed ultrices pretium accumsan. Aliquam lobortis nunc tortor, nec gravida turpis luctus nec.</p>
+
+      <a href="#" class="btn btn-primary" role="button">Apply Now!</a>
+    </div>
+    <div class="col-xs-12 col-sm-3 col-sm-offset-1">
+      <h2>Other jobs from this organization</h2>
+      <div class="list-group">
+        <a href="#" class="list-group-item">
+          <h4 class="list-group-item-heading">List group item heading</h4>
+          <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, neque, delectus vitae ducimus temporibus culpa. Sunt, at, quibusdam, earum facere sed illum quasi sint vel voluptate illo eius quae corrupti!</p>
+        </a>
+
+        <a href="#" class="list-group-item">
+          <h4 class="list-group-item-heading">List group item heading</h4>
+          <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, neque, delectus vitae ducimus temporibus culpa. Sunt, at, quibusdam, earum facere sed illum quasi sint vel voluptate illo eius quae corrupti!</p>
+        </a>
+
+        <a href="#" class="list-group-item">
+          <h4 class="list-group-item-heading">List group item heading</h4>
+          <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, neque, delectus vitae ducimus temporibus culpa. Sunt, at, quibusdam, earum facere sed illum quasi sint vel voluptate illo eius quae corrupti!</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

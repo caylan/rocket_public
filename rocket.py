@@ -50,15 +50,18 @@ class Job(db.Model):
     location = db.Column(db.String(80))
     deadline = db.Column(db.DateTime)
     description = db.Column(db.Text)
+    banner_url = db.Column(db.String(120))
     org_id = db.Column(db.Integer, db.ForeignKey('org.id'))
     tags = db.relationship('Tag', secondary=tags,
                            backref=db.backref('jobs', lazy='dynamic'))
 
-    def __init__(self, name, location, deadline, description):
+    def __init__(self, name, location, deadline, description, banner, org):
         self.name = name
         self.location = location
         self.deadline = deadline
         self.description = description
+        self.banner_url = banner
+        self.org_id = org
 
     def __repr__(self):
         return '<Job %r | %r>' % (self.name, self.id)
@@ -94,13 +97,13 @@ class Org(db.Model):
     location = db.Column(db.String(80))
     job_id = db.relationship('Job', backref='org', lazy='dynamic')
 
-    def __init__(self, orgname, description, location):
-        self.orgname = orgname
+    def __init__(self, name, description, location):
+        self.name = name
         self.description = description
         self.location = location
 
     def __repr__(self):
-        return '<Org %r | %r>' % (self.orgname, self.id)
+        return '<Org %r | %r>' % (self.name, self.id)
 
 
 class Tag(db.Model):
@@ -213,8 +216,7 @@ def show_jobs():
 @app.route('/details/<int:jid>')
 def display_job_details(jid):
     job = Job.query.get(jid)
-    return "Job with id: " + jid + ", name: " + job.name + "location: "\
-        + ", deadline: " + job.deadline + ", description: " + job.description
+    return render_template('job-details.html', job=job)
 
 
 @login_manager.user_loader
