@@ -6,7 +6,8 @@ from flask.ext.login import LoginManager, current_user, login_user, \
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf import Form
 from wtforms import fields
-from wtforms.validators import ValidationError, InputRequired, Length, Email
+from wtforms.validators import ValidationError, InputRequired, Length, Email, \
+    EqualTo
 
 
 #####################
@@ -34,12 +35,24 @@ login_manager.login_view = 'login'
 ### Models ###
 ##############
 
+tags = db.Table('tags',
+                db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
+                db.Column('job_id', db.Integer, db.ForeignKey('job.id')))
+
+job_user = db.Table('job_user',
+                    db.Column('job_id', db.Integer, db.ForeignKey('job.id')),
+                    db.Column('user_id', db.Integer, db.ForeignKey('user.id')))
+
+
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     location = db.Column(db.String(80))
     deadline = db.Column(db.DateTime)
     description = db.Column(db.Text)
+    org_id = db.Column(db.Integer, db.ForeignKey('org.id'))
+    tags = db.relationship('Tag', secondary=tags,
+                           backref=db.backref('jobs', lazy='dynamic'))
 
     def __init__(self, name, location, deadline, description):
         self.name = name
@@ -74,14 +87,41 @@ class User(db.Model):
         return '<User %r>' % self.email
 
 
+class Org(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150))
+    description = db.Column(db.Text)
+    location = db.Column(db.String(80))
+    job_id = db.relationship('Job', backref='org', lazy='dynamic')
+
+    def __init__(self, orgname, description, location):
+        self.orgname = orgname
+        self.description = description
+        self.location = location
+
+    def __repr__(self):
+        return '<Org %r | %r>' % (self.orgname, self.id)
+
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(80))
+
+    def __init__(self, tag):
+        self.tag = tag
+
+    def __repr__(self):
+        return '<Tag %r | %r>' % (self.tag, self.id)
+
+
 #############
 ### Forms ###
 #############
 
 class LoginForm(Form):
-    email = fields.TextField(u'email', [InputRequired()])
-    password = fields.PasswordField(u'password', [InputRequired()])
-    remember_me = fields.BooleanField(u'remember_me', default=False)
+    email = fields.TextField(validators=[InputRequired(), Email()])
+    password = fields.PasswordField(validators=[InputRequired()])
+    remember_me = fields.BooleanField(default=False)
 
     def validate_email(form, field):
         user = form.get_user(field.data)
@@ -98,15 +138,19 @@ class LoginForm(Form):
 
 
 class RegistrationForm(Form):
-    email = fields.TextField(u'email', [InputRequired(),
-                                        Length(min=5, max=120),
-                                        Email()])
-    password = fields.PasswordField(u'password', [InputRequired()])
+    first_name = fields.TextField(validators=[InputRequired()])
+    last_name = fields.TextField(validators=[InputRequired()])
+    email = fields.TextField(validators=[InputRequired(),
+                                         Length(min=5, max=120),
+                                         Email()])
+    password = fields.PasswordField(validators=[InputRequired()])
+    confirm = fields.PasswordField(
+        validators=[EqualTo('password', 'Passwords must match')])
+    accept_tos = fields.BooleanField(validators=[InputRequired()])
 
     def validate_email(form, field):
         if User.query.filter_by(email=field.data).count() > 0:
             raise ValidationError('This email is already in use.')
-
 
 
 #############
@@ -162,20 +206,8 @@ def show_jobs():
     """
     Renders a list of jobs that the currently logged in user qualifies for.
     """
-
-    j1 = Job('Job 1', 'Seattle, WA', datetime.now(),
-             'This is a description of the first job')
-    j1.id = 1
-    j2 = Job('Job 2', 'Spokane, WA', datetime.now(),
-             'This is a description of the second job')
-    j2.id = 2
-    j3 = Job('Job 3', 'Portland, OR', datetime.now(),
-             'This is a description of the third job')
-    j3.id = 3
-
-    jobs = [j1, j2, j3]
-
-    return render_template('job_list.html', jobs=jobs)
+    jobs = Job.query.all()
+    return render_template('jobs.html', jobs=jobs)
 
 
 @app.route('/details/<int:jid>')

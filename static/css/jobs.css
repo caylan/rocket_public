@@ -1,0 +1,15 @@
+/* top jobs page tweaks */
+#main h1 {
+  margin-top: 0;
+}
+#sidebar {
+  margin-top: 21px;
+}
+/* checked-list-group */
+.state-icon {
+    left: -5px;
+}
+.list-group-item-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 140, 186);
+}
