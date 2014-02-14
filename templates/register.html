@@ -14,26 +14,26 @@
           <fieldset>
             <h2>Create a new account</h2>
             <hr>
-            <div class="row form-group">
+            <div class="row form-group floating-label-form-group">
               <div class="col-xs-6">
-              {{ form.first_name(class_="form-control input-lg", placeholder="First Name") }}
-              {{ show_errors(form.errors.first_name) }}
+                {{ form.first_name(class_="form-control input-lg", placeholder="First Name") }}
+                {{ show_errors(form.errors.first_name) }}
               </div>
               <div class="col-xs-6">
-              {{ form.last_name(class_="form-control input-lg", placeholder="Last Name") }}
-              {{ show_errors(form.errors.last_name) }}
+                {{ form.last_name(class_="form-control input-lg", placeholder="Last Name") }}
+                {{ show_errors(form.errors.last_name) }}
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group floating-label-form-group">
               {{ form.email(class_="form-control input-lg", type="email", placeholder="Email Address") }}
               {{ show_errors(form.errors.email) }}
             </div>
-            <div class="form-group">
+            <div class="form-group floating-label-form-group">
               {{ form.password(class_="form-control input-lg", placeholder="Password") }}
               {{ show_errors(form.errors.password) }}
             </div>
-            <div class="form-group">
-              {{ form.confirm(class_="form-control input-lg", placeholder="Confirm password") }}
+            <div class="form-group floating-label-form-group">
+              {{ form.confirm(class_="form-control input-lg", placeholder="Confirm Password") }}
               {{ show_errors(form.errors.confirm) }}
             </div>
             <div class="checkbox">
@@ -49,4 +49,7 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
 {% endblock %}

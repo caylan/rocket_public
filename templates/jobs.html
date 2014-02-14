@@ -30,65 +30,25 @@
       <!-- main area -->
       <div class="col-xs-12 col-sm-9" id="main">
         <h1>Volunteer Opportunities</h1>
-        <div class="row">
-          <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-              <a href="details/1"><img src="http://lorempixel.com/300/200/cats/5/" alt="..."></a>
-              <div class="caption">
-                <h3>Organization Name</h3>
-                <p><em>Job title</em></p>
-                <p>Some description of the job. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam elementum elit pulvinar sapien condimentum, id rhoncus nunc pharetra. Pellentesque consequat, sapien at aliquam blandit, leo nunc pellentesque purus, et varius felis dolor a diam. </p>
-                <p><a href="#" class="btn btn-primary" role="button">Apply</a> <a href="#" class="btn btn-default" role="button">More Info</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-              <a href="details/1"><img src="http://lorempixel.com/300/200/cats/1/" alt="..."></a>
-              <div class="caption">
-                <h3>Organization Name</h3>
-                <p><em>Job title</em></p>
-                <p>Ut sed varius velit, a condimentum libero. Donec eu mauris vulputate, varius est et, sagittis quam. Donec ac lorem in dui ultrices scelerisque at feugiat est. Fusce lorem tortor, sollicitudin nec venenatis in, aliquam pretium enim. Aenean mattis non sem non tempor. Duis justo quam, eleifend in laoreet a, interdum id arcu.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Apply</a> <a href="#" class="btn btn-default" role="button">More Info</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-              <a href="details/1"><img src="http://lorempixel.com/300/200/cats/7/" alt="..."></a>
-              <div class="caption">
-                <h3>Organization Name</h3>
-                <p><em>Job title</em></p>
-                <p>Proin aliquam mollis nulla nec euismod. Pellentesque consectetur blandit tempus. Phasellus sed fringilla lacus. Etiam sagittis justo sed congue condimentum. Cras aliquam lacinia cursus.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Apply</a> <a href="#" class="btn btn-default" role="button">More Info</a></p>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% for job in jobs %}
+          {% if loop.index0 is divisibleby 3 %}
           <div class="row">
+          {% endif %}
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-              <a href="details/1"><img src="http://lorempixel.com/300/200/cats/3/" alt="..."></a>
+              <a href="{{ url_for('display_job_details', jid=job.id) }}"><img src="{{ job.banner_url }}" alt="{{ job.name }}"></a>
               <div class="caption">
-                <h3>Organization Name</h3>
-                <p><em>Job title</em></p>
-                <p>Integer lobortis odio non risus pellentesque, quis adipiscing urna dictum. Sed ut risus urna. Sed suscipit condimentum eros, sit amet tincidunt quam sodales sit amet. Aliquam erat volutpat. Phasellus urna nisi, dapibus sit amet lorem consequat, cursus mattis mi.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Apply</a> <a href="#" class="btn btn-default" role="button">More Info</a></p>
+                <h3>{{ job.org.name }}</h3>
+                <p><em>{{ job.name }}</em></p>
+                <p>{{ job.description }}</p>
+                <p><a href="{{ url_for('display_job_details', jid=job.id) }}" class="btn btn-primary" role="button">Apply</a> <a href="{{ url_for('display_job_details', jid=job.id) }}" class="btn btn-default" role="button">More Info</a></p>
               </div>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-              <a href="details/1"><img src="http://lorempixel.com/300/200/cats/4/" alt="..."></a>
-              <div class="caption">
-                <h3>Organization Name</h3>
-                <p><em>Job title</em></p>
-                <p>Aenean ac vestibulum augue. Vestibulum vel diam libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed id diam vel diam tempus pretium quis et urna. Aliquam feugiat placerat ligula, ut suscipit nisi bibendum sit amet. Praesent ligula neque, tincidunt eget eleifend nec, venenatis pellentesque urna. Pellentesque molestie vulputate massa, id ultricies nunc pulvinar eget. Donec non mollis nibh, at auctor sem. Maecenas eget varius mi, a scelerisque neque. Integer vel lacus a libero consectetur laoreet. In venenatis enim id viverra fringilla.</p>
-                <p><a href="#" class="btn btn-primary" role="button">Apply</a> <a href="#" class="btn btn-default" role="button">More Info</a></p>
-              </div>
-            </div>
+          {% if loop.index is divisibleby 3 %}
           </div>
-        </div>
+          {% endif %}
+        {% endfor %}
       </div><!-- /.col-xs-12 main -->
   </div><!--/.row-->
 </div>

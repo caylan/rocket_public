@@ -217,7 +217,9 @@ def show_jobs():
 @app.route('/details/<int:jid>')
 def display_job_details(jid):
     job = Job.query.get(jid)
-    return render_template('job-details.html', job=job)
+    big_banner = job.banner_url.replace('300/200', '850/300')
+    other_jobs = Job.query.filter_by(org_id=job.org_id)
+    return render_template('job-details.html', job=job, banner_url=big_banner, other_jobs=other_jobs)
 
 
 @login_manager.user_loader
