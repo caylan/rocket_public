@@ -65,7 +65,7 @@ class Job(db.Model):
         self.org_id = org
 
     def __repr__(self):
-        return '<Job %r | %r>' % (self.name, self.id)
+        return '<Job %r | id %r>' % (self.name, self.id)
 
 
 class User(db.Model):
@@ -104,7 +104,7 @@ class Org(db.Model):
         self.location = location
 
     def __repr__(self):
-        return '<Org %r | %r>' % (self.name, self.id)
+        return '<Org %r | id %r>' % (self.name, self.id)
 
 
 class Tag(db.Model):
@@ -115,7 +115,7 @@ class Tag(db.Model):
         self.tag = tag
 
     def __repr__(self):
-        return '<Tag %r | %r>' % (self.tag, self.id)
+        return '<Tag %r | id %r>' % (self.tag, self.id)
 
 
 #############

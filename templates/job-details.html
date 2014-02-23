@@ -25,7 +25,7 @@
         {% if other.id != job.id %}
         <a href="{{ url_for('display_job_details', jid=other.id) }}" class="list-group-item">
           <h4 class="list-group-item-heading">{{ other.name }}</h4>
-          <p class="list-group-item-text">{{ other.description }}</p>
+          <p class="list-group-item-text">{{ other.description|truncate(100) }}</p>
         </a>
         {% endif %}
         {% endfor %}
